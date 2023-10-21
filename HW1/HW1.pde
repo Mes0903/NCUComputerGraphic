@@ -7,6 +7,7 @@ ShapeButton pencilButton;
 ShapeButton eraserButton;
 
 Button clearButton;
+Button paletteButton;
 
 ShapeRenderer shapeRenderer;
 ArrayList<ShapeButton> shapeButton;
@@ -31,11 +32,10 @@ public void draw(){
     }  
     
     clearButton.run(()->{shapeRenderer.clear();});
+    paletteButton.run(()->{shapeRenderer.setShapeColor();});
     shapeRenderer.box.show();
 
     shapeRenderer.run();
-   
-    
 }
 
 void resetButton(){
@@ -158,6 +158,9 @@ public void initButton(){
   eraserButton.setBoxAndClickColor(color(250),color(150));
   shapeButton.add(eraserButton);
   
+  paletteButton = new ShapeButton(255,10,30,30);
+  paletteButton.setImage(loadImage("palette.png"));
+  paletteButton.setBoxAndClickColor(color(250),color(150));
 
 }
 

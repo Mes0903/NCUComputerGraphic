@@ -1,20 +1,18 @@
-public void CGLine(float x1, float y1, float x2, float y2) {
+public void CGLine(float x1, float y1, float x2, float y2, color c) {
     // Calculate differences between the coordinates
     // and the sign of the differences
-    int dx = (int)abs(x2 - x1);
-    int dy = (int)abs(y2 - y1);
-    int sx = x1 < x2 ? 1 : -1; // sx is the sign of x
-    int sy = y1 < y2 ? 1 : -1; // sy is the sign of y
+    float dx = abs(x2 - x1);
+    float dy = abs(y2 - y1);
+    float sx = x1 < x2 ? 1 : -1; // sx is the sign of x
+    float sy = y1 < y2 ? 1 : -1; // sy is the sign of y
 
     // Calculate the error
-    int err = dx - dy;
+    float err = dx - dy;
 
-    int x = (int)x1;
-    int y = (int)y1;
     // Loop until the line is drawn
-    while (x != (int)x2) {
+    while (x1 != x2 || y1 != y2) {
         // Draw the pixel at the correct place
-        drawPoint(x, y, color(0));
+        drawPoint(x1, y1, color(255, 0, 0));
 
         // Calculate the error for the next step
         float e2 = 2 * err;
@@ -23,31 +21,35 @@ public void CGLine(float x1, float y1, float x2, float y2) {
         // and the sign of the y coordinate
         if (e2 > -dy) {
             err -= dy;
-            x += sx;
+            x1 += sx;
         }
 
         // Update the error value based on the new error
         // and the sign of the x coordinate
         if (e2 < dx) {
             err += dx;
-            y += sy;
+            y1 += sy;
         }
     }
 }
 
-public void CGCircle(float x, float y, float r) {
+public void CGLine(float x1, float y1, float x2, float y2){
+    CGLine(x1, y1, x2, y2, color(255, 0, 0));
+}
+
+public void CGCircle(float x, float y, float r, color c) {
     float d = 1 - r;
     float x1 = 0;
     float y1 = r;
     while (x1 <= y1) {
-        drawPoint(x + x1, y + y1, color(0));
-        drawPoint(x + y1, y + x1, color(0));
-        drawPoint(x + y1, y - x1, color(0));
-        drawPoint(x + x1, y - y1, color(0));
-        drawPoint(x - x1, y - y1, color(0));
-        drawPoint(x - y1, y - x1, color(0));
-        drawPoint(x - y1, y + x1, color(0));
-        drawPoint(x - x1, y + y1, color(0));
+        drawPoint(x + x1, y + y1, c);
+        drawPoint(x + y1, y + x1, c);
+        drawPoint(x + y1, y - x1, c);
+        drawPoint(x + x1, y - y1, c);
+        drawPoint(x - x1, y - y1, c);
+        drawPoint(x - y1, y - x1, c);
+        drawPoint(x - y1, y + x1, c);
+        drawPoint(x - x1, y + y1, c);
         if (d < 0) {
             d += 2 * x1 + 3;
         } 
@@ -59,7 +61,11 @@ public void CGCircle(float x, float y, float r) {
     }
 }
 
-public void CGEllipse(float x, float y, float r1, float r2) {
+public void CGCircle(float x, float y, float r) {
+    CGCircle(x, y, r, color(255, 0, 0));
+}
+
+public void CGEllipse(float x, float y, float r1, float r2, color c) {
     float r1squared = r1 * r1;
     float r2squared = r2 * r2;
     float x1 = 0;
@@ -68,10 +74,10 @@ public void CGEllipse(float x, float y, float r1, float r2) {
     float dx = 2 * r2squared * x1;
     float dy = 2 * r1squared * y1;
     while (dx < dy) {
-        drawPoint(x + x1, y + y1, color(0));
-        drawPoint(x - x1, y + y1, color(0));
-        drawPoint(x - x1, y - y1, color(0));
-        drawPoint(x + x1, y - y1, color(0));
+        drawPoint(x + x1, y + y1, c);
+        drawPoint(x - x1, y + y1, c);
+        drawPoint(x - x1, y - y1, c);
+        drawPoint(x + x1, y - y1, c);
         if (d1 < 0) {
             dx += 2 * r2squared;
             d1 += dx + r2squared;
@@ -87,10 +93,10 @@ public void CGEllipse(float x, float y, float r1, float r2) {
 
     float d2 = r2squared * (x1 + 0.5f) * (x1 + 0.5f) + r1squared * (y1 - 1) * (y1 - 1) - r1squared * r2squared;
     while (y1 >= 0) {
-        drawPoint(x + x1, y + y1, color(0));
-        drawPoint(x - x1, y + y1, color(0));
-        drawPoint(x - x1, y - y1, color(0));
-        drawPoint(x + x1, y - y1, color(0));
+        drawPoint(x + x1, y + y1, c);
+        drawPoint(x - x1, y + y1, c);
+        drawPoint(x - x1, y - y1, c);
+        drawPoint(x + x1, y - y1, c);
         if (d2 > 0) {
             dy -= 2 * r1squared;
             d2 += r1squared - dy;
@@ -105,14 +111,22 @@ public void CGEllipse(float x, float y, float r1, float r2) {
     }
 }
 
-public void CGCurve(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4) {
+public void CGEllipse(float x, float y, float r1, float r2) {
+    CGEllipse(x, y, r1, r2, color(255, 0, 0));
+}
+
+public void CGCurve(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, color c) {
     float t = 0;
     while (t <= 1) {
         float x = bezierPoint(p1.x, p2.x, p3.x, p4.x, t);
         float y = bezierPoint(p1.y, p2.y, p3.y, p4.y, t);
-        drawPoint(x, y, color(0));
+        drawPoint(x, y, c);
         t += 0.001;
     }
+}
+
+public void CGCurve(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4) {
+    CGCurve(p1, p2, p3, p4, color(255, 0, 0));
 }
 
 public void CGEraser(Vector3 p1, Vector3 p2) {

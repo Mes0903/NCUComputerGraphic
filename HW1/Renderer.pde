@@ -33,6 +33,11 @@ public class ShapeRenderer{
     public void clear(){
         shapes.clear();
     }
+    public void setShapeColor(){
+        if(shapes.size()<=0) return;
+        // set the member variable `shapeColor` for every element in shapes
+        shapes.forEach(s->s.setShapeColor());
+    }
 }
 
 

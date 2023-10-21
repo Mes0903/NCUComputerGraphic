@@ -1,9 +1,15 @@
-
-public interface Shape{
-    public void drawShape();
+abstract public class Shape{
+    abstract public void drawShape();
+    public void setShapeColor() {
+        float R = random(0,255);
+        float G = random(0,255);
+        float B = random(0,255);
+        shapeColor = color(R,G,B);
+    };
+    public color shapeColor = color(0);
 }
 
-public class Point implements Shape{
+public class Point extends Shape{
     ArrayList<Vector3> points = new ArrayList<Vector3>();
     public Point(ArrayList<Vector3> p){
         points = p;
@@ -15,12 +21,12 @@ public class Point implements Shape{
         for(int i=0;i<points.size()-1;i++){
             Vector3 p1 = points.get(i);
             Vector3 p2 = points.get(i+1);
-            CGLine(p1.x,p1.y,p2.x,p2.y);
+            CGLine(p1.x,p1.y,p2.x,p2.y,shapeColor);
         }
     }
 }
 
-public class Line implements Shape{
+public class Line extends Shape{
     Vector3 point1;
     Vector3 point2;
     
@@ -32,13 +38,13 @@ public class Line implements Shape{
     
     @Override
     public void drawShape(){
-        CGLine(point1.x,point1.y,point2.x,point2.y);
+        CGLine(point1.x,point1.y,point2.x,point2.y,shapeColor);
     }
     
    
 }
 
-public class Circle implements Shape{
+public class Circle extends Shape{
     Vector3 center;
     float radius;
     public Circle(){}
@@ -48,11 +54,11 @@ public class Circle implements Shape{
     }
     @Override
     public void drawShape(){
-        CGCircle(center.x,center.y,radius);
+        CGCircle(center.x,center.y,radius,shapeColor);
     }   
 }
 
-public class Polygon implements Shape{
+public class Polygon extends Shape{
     ArrayList<Vector3> verties = new ArrayList<Vector3>();
      public Polygon(ArrayList<Vector3> v){
         verties= v;
@@ -64,12 +70,12 @@ public class Polygon implements Shape{
         for(int i=0;i<=verties.size();i++){
               Vector3 p1 = verties.get(i%verties.size());
               Vector3 p2 = verties.get((i+1)%verties.size());
-              CGLine(p1.x,p1.y,p2.x,p2.y);
+              CGLine(p1.x,p1.y,p2.x,p2.y,shapeColor);
          }
     } 
 }
 
-public class Ellipse implements Shape{
+public class Ellipse extends Shape{
     Vector3 center;
     float radius1,radius2;
     
@@ -82,11 +88,11 @@ public class Ellipse implements Shape{
     
     @Override
     public void drawShape(){
-        CGEllipse(center.x,center.y,radius1,radius2);
+        CGEllipse(center.x,center.y,radius1,radius2,shapeColor);
     }
 }
 
-public class Curve implements Shape{
+public class Curve extends Shape{
     Vector3 cpoint1,cpoint2,cpoint3,cpoint4;
     float radius1,radius2;
     
@@ -97,11 +103,11 @@ public class Curve implements Shape{
     
     @Override
     public void drawShape(){
-        CGCurve(cpoint1,cpoint2,cpoint3,cpoint4);
+        CGCurve(cpoint1,cpoint2,cpoint3,cpoint4,shapeColor);
     }
 }
 
-public class EraseArea implements Shape{
+public class EraseArea extends Shape{
     Vector3 point1,point2;
     public EraseArea(){}
     public EraseArea(Vector3 p1,Vector3 p2){
