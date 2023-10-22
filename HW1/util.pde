@@ -29,7 +29,7 @@ public void CGLine(float x1, float y1, float x2, float y2, color c) {
 
     int dx = int(x2 - x1); // the difference between x1 and x2
     int dy = int(abs(y2 - y1)); // the difference between y1 and y2
-    int derror = abs(dy) * 2; // the error of y
+    int derror = abs(dy) * 2; // the degree of error
     int error = 0; // the error
     int ystep = (y1 < y2) ? 1 : -1; // the step size of y
 
