@@ -20,5 +20,32 @@
 
 # CGEllipse
 
-使用 Midpoint ellipse drawing algorithm
+使用 Midpoint ellipse drawing algorithm，以下翻自 [Midpoint ellipse drawing algorithm](https://www.geeksforgeeks.org/midpoint-ellipse-drawing-algorithm/)
 
+中心點位於 $(h, k)$ 的橢圓，其標準方程為    
+
+$$
+\frac{(x-h)^2}{a^2} + \frac{(y-k)^2}{b^2} = 1,\ (a > b > 0)$$
+
+所以我們可以透過下面這個方程式判斷一個點是不是在一個橢圓裡面    
+
+$$
+f(x, y) = r_y^2 x^2 + r_x^2 y^2 - r_x^2 r_y^2
+$$
+
+會有三種狀況
+
+1. 如果 `f(x,y) < 0`，則 `(x,y)` 在橢圓內
+2. 如果 `f(x,y) > 0`，則 `(x,y)` 在橢圓外
+3. 如果 `f(x,y) = 0`，則 `(x,y)` 在橢圓上
+    
+在畫的時候，我們會將橢圓的象限分為四個部分，並把每個象限分為兩個區域，然後將第一象限內每個點的 `(x,y)` 投影到另外三個象限 `(-x,y)`、`(x,-y)`、`(-x,-y)` 
+
+### 演算法
+
+1. 假設橢圓一開始中心在 `(0,0)`，將 `x1` 初始化為 `0`，`y1` 初始化為 `r2`
+2. 初始化第一個區域的精度參數 $p1_0$ 為 `r2*r2 - r1*r1*r2 + 0.25f*r1*r1`
+3. 對於在第一個區域的所有 $x_k$:  
+    如果 $p1_k < 0$，則 
+    1. $p1_{k+1} = p1_k + 2r_y^2 x_{k+1} + r_y^2$
+    2. 
