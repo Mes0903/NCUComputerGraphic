@@ -1,55 +1,71 @@
 public void CGLine(float x1, float y1, float x2, float y2, color c) {
     // Calculate differences between the coordinates
     // and the sign of the differences
-    float dx = abs(x2 - x1);
-    float dy = abs(y2 - y1);
-    float sx = x1 < x2 ? 1 : -1; // sx is the sign of x
-    float sy = y1 < y2 ? 1 : -1; // sy is the sign of y
+    boolean steep = abs(y2 - y1) > abs(x2 - x1); 
 
-    // Calculate the error
-    float err = dx - dy;
+    if (steep) {
+        // swap x1, y1
+        float temp = x1;
+        x1 = y1;
+        y1 = temp;
 
-    // Loop until the line is drawn
-    while (x1 != x2 || y1 != y2) {
-        // Draw the pixel at the correct place
-        drawPoint(x1, y1, color(255, 0, 0));
+        // swap x2, y2
+        temp = x2;
+        x2 = y2;
+        y2 = temp;
+    }
 
-        // Calculate the error for the next step
-        float e2 = 2 * err;
+    if(x1 > x2) {
+        // swap x1, x2
+        float temp = x1;
+        x1 = x2;
+        x2 = temp;
 
-        // Update the error value based on the new error
-        // and the sign of the y coordinate
-        if (e2 > -dy) {
-            err -= dy;
-            x1 += sx;
-        }
+        // swap y1, y2
+        temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
 
-        // Update the error value based on the new error
-        // and the sign of the x coordinate
-        if (e2 < dx) {
-            err += dx;
-            y1 += sy;
+    int dx = int(x2 - x1); // the difference between x1 and x2
+    int dy = int(abs(y2 - y1)); // the difference between y1 and y2
+    int derror = abs(dy) * 2; // the error of y
+    int error = 0; // the error
+    int ystep = (y1 < y2) ? 1 : -1; // the step size of y
+
+    for (int x = (int)x1, y = (int)y1; x <= (int)x2; x++) {
+        if (steep)
+            drawPoint(y, x, c);
+        else 
+            drawPoint(x, y, c);
+
+        error += derror;
+        // if the delta is smaller than middle point, draw the downer pixel, otherwise draw the upper pixel
+        if(error > dx) {
+            y += ystep;
+            error -=  dx * 2;
         }
     }
 }
+
 
 public void CGLine(float x1, float y1, float x2, float y2){
     CGLine(x1, y1, x2, y2, color(255, 0, 0));
 }
 
 public void CGCircle(float x, float y, float r, color c) {
-    float d = 1 - r;
-    float x1 = 0;
-    float y1 = r;
+    int d = int(1 - r);
+    int x1 = 0;
+    int y1 = (int)r;
     while (x1 <= y1) {
-        drawPoint(x + x1, y + y1, c);
-        drawPoint(x + y1, y + x1, c);
-        drawPoint(x + y1, y - x1, c);
-        drawPoint(x + x1, y - y1, c);
-        drawPoint(x - x1, y - y1, c);
-        drawPoint(x - y1, y - x1, c);
-        drawPoint(x - y1, y + x1, c);
-        drawPoint(x - x1, y + y1, c);
+        drawPoint((int)x + x1, (int)y + y1, c);
+        drawPoint((int)x + y1, (int)y + x1, c);
+        drawPoint((int)x + y1, (int)y - x1, c);
+        drawPoint((int)x + x1, (int)y - y1, c);
+        drawPoint((int)x - x1, (int)y - y1, c);
+        drawPoint((int)x - y1, (int)y - x1, c);
+        drawPoint((int)x - y1, (int)y + x1, c);
+        drawPoint((int)x - x1, (int)y + y1, c);
         if (d < 0) {
             d += 2 * x1 + 3;
         } 
