@@ -132,12 +132,16 @@ public void CGEllipse(float x, float y, float r1, float r2) {
 }
 
 public void CGCurve(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, color c) {
-    float t = 0;
-    while (t <= 1) {
-        float x = bezierPoint(p1.x, p2.x, p3.x, p4.x, t);
-        float y = bezierPoint(p1.y, p2.y, p3.y, p4.y, t);
-        drawPoint(x, y, c);
-        t += 0.001;
+    
+    for(float t = 0.0; t <= 1.0; t += 0.0001) {
+        float t2 = t * t;
+        float t3 = t * t * t;
+        Vector3 pointOnCurve = new Vector3(
+            p1.x * (1 - t) * (1 - t) * (1 - t) + 3 * p2.x * t * (1 - t) * (1 - t) + 3 * p3.x * t2 * (1 - t) + p4.x * t3,
+            p1.y * (1 - t) * (1 - t) * (1 - t) + 3 * p2.y * t * (1 - t) * (1 - t) + 3 * p3.y * t2 * (1 - t) + p4.y * t3,
+            p1.z * (1 - t) * (1 - t) * (1 - t) + 3 * p2.z * t * (1 - t) * (1 - t) + 3 * p3.z * t2 * (1 - t) + p4.z * t3
+        );
+        drawPoint(pointOnCurve.x, pointOnCurve.y, c);
     }
 }
 
