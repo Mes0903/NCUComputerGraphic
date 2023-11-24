@@ -27,9 +27,11 @@ public class Shape{
             }
         }
         
+             
         for(int i=0;i<t_pos.length;i++){          
             CGLine(t_pos[i].x,t_pos[i].y,t_pos[(i+1)%t_pos.length].x,t_pos[(i+1)%t_pos.length].y); // if you finish it, you can commant this sentance
         }
+        
         updatePixels();
         
     };

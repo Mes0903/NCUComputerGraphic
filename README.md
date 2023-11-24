@@ -11,3 +11,5 @@ Before extracting, please download the zip file.
 
 - [Lab0](https://hackmd.io/@leon890820/Sk_lqMopn)
 - [Lab1](https://hackmd.io/@leon890820/SyUgjGap3)
+- [Lab2](https://hackmd.io/@leon890820/B1gslU-GT)
+- [Lab3](https://hackmd.io/@leon890820/SygdXPEjEa)
