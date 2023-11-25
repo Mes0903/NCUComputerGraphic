@@ -69,33 +69,45 @@ public float distance(Vector3 a,Vector3 b){
     return sqrt(Vector3.dot(c,c));
 }
 
-
-
 boolean pnpoly(float x, float y, Vector3[] vertexes) {
   // To-Do : You need to check the coordinate p(x,v) if inside the vertexes. If yes return true.
     
   boolean c = false;
 
-    
+  int i, j;
+  for (i = 0, j = vertexes.length - 1; i < vertexes.length; j = i++) {
+    if ( ((vertexes[i].y > y) != (vertexes[j].y > y)) &&
+     (x < (vertexes[j].x - vertexes[i].x) * (y - vertexes[i].y) / (vertexes[j].y - vertexes[i].y) + vertexes[i].x) )
+       c = !c;
+  }
+
   return c;
 }
 
 public Vector3[] findBoundBox(Vector3[] v) {
-    Vector3 recordminV=new Vector3(1.0/0.0);
-    Vector3 recordmaxV=new Vector3(-1.0/0.0);
+    Vector3 recordminV = new Vector3(Float.MAX_VALUE);
+    Vector3 recordmaxV = new Vector3(Float.MIN_VALUE);
     // To-Do : You need to find the bounding box of the vertexes v.
     
-   //     r1 -------
-   //       |   /\  |
-   //       |  /  \ |
-   //       | /____\|
-   //        ------- r2
+    //     r1 -------
+    //       |   /\  |
+    //       |  /  \ |
+    //       | /____\|
+    //        ------- r2
     
+    for (Vector3 vertex : v) {
+        if (vertex.x < recordminV.x) recordminV.x = vertex.x;
+        if (vertex.y < recordminV.y) recordminV.y = vertex.y;
+        if (vertex.z < recordminV.z) recordminV.z = vertex.z;
 
-    Vector3[] result={recordminV, recordmaxV};
+        if (vertex.x > recordmaxV.x) recordmaxV.x = vertex.x;
+        if (vertex.y > recordmaxV.y) recordmaxV.y = vertex.y;
+        if (vertex.z > recordmaxV.z) recordmaxV.z = vertex.z;
+    }
+
+    Vector3[] result = {recordminV, recordmaxV};
+
     return result;
-    
-
 }
 
 
