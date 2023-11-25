@@ -31,43 +31,36 @@ static class Matrix4{
      m[4]  = 0.0f; m[5]  = 1.0f; m[6]  = 0.0f; m[7]  = 0.0f;
      m[8]  = 0.0f; m[9]  = 0.0f; m[10] = 1.0f; m[11] = 0.0f;
      m[12] = 0.0f; m[13] = 0.0f; m[14] = 0.0f; m[15] = 1.0f;
-    
   }
 
   void makeRotX(float a) {
     // To-Do
     // You need to implement the rotation of x-axis matrix here.
 
-    m[0] =  1.0f; m[1]  = 0.0f;        m[2]  = 0.0f;         m[3]  = 0.0f;
-    m[4] =  0.0f; m[5]  = cos(a);      m[6]  = -sin(a);      m[7]  = 0.0f;
-    m[8] =  0.0f; m[9]  = sin(a);      m[10] = cos(a);       m[11] = 0.0f;
-    m[12] = 0.0f; m[13] = 0.0f;        m[14] = 0.0f;         m[15] = 1.0f;
-
-    makeIdentity();
+    m[0] =  1.0f; m[1]  = 0.0f;   m[2]  = 0.0f;    m[3]  = 0.0f;
+    m[4] =  0.0f; m[5]  = cos(a); m[6]  = -sin(a); m[7]  = 0.0f;
+    m[8] =  0.0f; m[9]  = sin(a); m[10] = cos(a);  m[11] = 0.0f;
+    m[12] = 0.0f; m[13] = 0.0f;   m[14] = 0.0f;    m[15] = 1.0f;
   }
 
   void makeRotY(float a) {
     // To-Do
     // You need to implement the rotation of y-axis matrix here.
 
-    m[0]  = cos(a);       m[1]  = 0.0f; m[2]  = sin(a);      m[3]  = 0.0f;
-    m[4]  = 0.0f;         m[5]  = 1.0f; m[6]  = 0.0f;        m[7]  = 0.0f;
-    m[8]  = -sin(a);      m[9]  = 0.0f; m[10] = cos(a);      m[11] = 0.0f;
-    m[12] = 0.0f;         m[13] = 0.0f; m[14] = 0.0f;        m[15] = 1.0f;
-
-    makeIdentity();
+    m[0]  = cos(a);  m[1]  = 0.0f; m[2]  = sin(a); m[3]  = 0.0f;
+    m[4]  = 0.0f;    m[5]  = 1.0f; m[6]  = 0.0f;   m[7]  = 0.0f;
+    m[8]  = -sin(a); m[9]  = 0.0f; m[10] = cos(a); m[11] = 0.0f;
+    m[12] = 0.0f;    m[13] = 0.0f; m[14] = 0.0f;   m[15] = 1.0f;
   }
 
   void makeRotZ(float a) {
     // To-Do
     // You need to implement the rotation of z-axis matrix here.
 
-    m[0]  = cos(a);      m[1]  = -sin(a);      m[2]  = 0.0f; m[3]  = 0.0f;
-    m[4]  = sin(a);      m[5]  = cos(a);       m[6]  = 0.0f; m[7]  = 0.0f;
-    m[8]  = 0.0f;        m[9]  = 0.0f;         m[10] = 1.0f; m[11] = 0.0f;
-    m[12] = 0.0f;        m[13] = 0.0f;         m[14] = 0.0f; m[15] = 1.0f;
-
-    makeIdentity();
+    m[0]  = cos(a); m[1]  = -sin(a); m[2]  = 0.0f; m[3]  = 0.0f;
+    m[4]  = sin(a); m[5]  = cos(a);  m[6]  = 0.0f; m[7]  = 0.0f;
+    m[8]  = 0.0f;   m[9]  = 0.0f;    m[10] = 1.0f; m[11] = 0.0f;
+    m[12] = 0.0f;   m[13] = 0.0f;    m[14] = 0.0f; m[15] = 1.0f;
   }
   
   void makeTrans(Vector3 t) {
@@ -78,8 +71,6 @@ static class Matrix4{
     m[4]  = 0.0f; m[5]  = 1.0f; m[6]  = 0.0f; m[7]  = t.y;
     m[8]  = 0.0f; m[9]  = 0.0f; m[10] = 1.0f; m[11] = t.z;
     m[12] = 0.0f; m[13] = 0.0f; m[14] = 0.0f; m[15] = 1.0f;
-
-    makeIdentity();
   }
 
   void makeScale(Vector3 s) {
@@ -90,8 +81,6 @@ static class Matrix4{
     m[4]  = 0.0f; m[5]  = s.y;  m[6]  = 0.0f; m[7]  = 0.0f;
     m[8]  = 0.0f; m[9]  = 0.0f; m[10] = s.z;  m[11] = 0.0f;
     m[12] = 0.0f; m[13] = 0.0f; m[14] = 0.0f; m[15] = 1.0f;
-
-    makeIdentity();
   }
   
   void makeMirror(){
