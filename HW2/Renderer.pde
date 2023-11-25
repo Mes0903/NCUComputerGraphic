@@ -13,8 +13,6 @@ public class ShapeRenderer{
       
     }
     
-
-    
     public void addShape(Shape s){
       shapes.add(s);
       engine.hierarchy.addButton(s);

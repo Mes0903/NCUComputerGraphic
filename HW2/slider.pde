@@ -51,6 +51,4 @@ class Slider extends Button{
         }
     }
     
-    
-
 }
