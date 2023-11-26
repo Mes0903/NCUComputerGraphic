@@ -48,7 +48,6 @@ public void CGLine(float x1, float y1, float x2, float y2, color c) {
     }
 }
 
-
 public void CGLine(float x1, float y1, float x2, float y2){
     CGLine(x1, y1, x2, y2, color(255, 0, 0));
 }
@@ -110,28 +109,73 @@ public Vector3[] findBoundBox(Vector3[] v) {
     return result;
 }
 
-
-public Vector3[] Sutherland_Hodgman_algorithm(Vector3[] points,Vector3[] boundary){
+public Vector3[] Sutherland_Hodgman_algorithm(Vector3[] points, Vector3[] boundary) {
     ArrayList<Vector3> input=new ArrayList<Vector3>();
     ArrayList<Vector3> output=new ArrayList<Vector3>();
-    for (int i=0; i<points.length; i+=1) {
+    for (int i=0; i < points.length; i+=1) {
         input.add(points[i]);
     }
-    
+
     // To-Do
     // You need to implement the Sutherland Hodgman Algorithm in this section.
     // The function you pass 2 parameter. One is the vertexes of the shape "points".
     // And the other is the vertexes of the "boundary".
     // The output is the vertexes of the polygon.
-    
-    
-     output = input;
-    
-    
-    
-    Vector3[] result=new Vector3[output.size()];
-    for (int i=0; i<result.length; i+=1) {
-        result[i]=output.get(i);
+
+    // iterate through each edge of the boundary
+    for (int i = 0; i < boundary.length; i++) {
+        Vector3 clipEdgeStart = boundary[i]; // start point of the edge
+        Vector3 clipEdgeEnd = boundary[(i + 1) % boundary.length]; // end point of the edge
+
+        output.clear();
+
+        // iterate through each edge of the polygon
+        for (int j = 0; j < input.size(); j++) {
+            Vector3 currentPoint = input.get(j); // current point
+            Vector3 prevPoint = input.get((j + input.size() - 1) % input.size());  // previous point
+
+            boolean currentInside = isInside(clipEdgeStart, clipEdgeEnd, currentPoint); // check if current point is inside the boundary
+            boolean prevInside = isInside(clipEdgeStart, clipEdgeEnd, prevPoint); // check if previous point is inside the boundary
+
+            // if current point is inside the boundary, add it to the output
+            if (currentInside) {
+                // if previous point is outside the boundary, add the intersection point to the output
+                if (!prevInside) {
+                    output.add(intersect(prevPoint, currentPoint, clipEdgeStart, clipEdgeEnd));
+                }
+                output.add(currentPoint);
+            } 
+            // if previous point is inside the boundary, add the intersection point to the output
+            else if (prevInside) {
+                output.add(intersect(prevPoint, currentPoint, clipEdgeStart, clipEdgeEnd));
+            }
+        }
+
+        input = new ArrayList<Vector3>(output);
+    }
+
+    Vector3[] result = new Vector3[output.size()];
+    for (int i=0; i < result.length; i+=1) {
+        result[i] = output.get(i);
     }
     return result;
+}
+
+// check if a point is inside the boundary
+private boolean isInside(Vector3 edgeStart, Vector3 edgeEnd, Vector3 point) {
+    return ((edgeEnd.x - edgeStart.x) * (point.y - edgeStart.y) - (edgeEnd.y - edgeStart.y) * (point.x - edgeStart.x)) < 0;
+}
+
+// find the intersection point of a line and an edge
+private Vector3 intersect(Vector3 lineStart, Vector3 lineEnd, Vector3 edgeStart, Vector3 edgeEnd) {
+    float x1 = lineStart.x, y1 = lineStart.y;
+    float x2 = lineEnd.x, y2 = lineEnd.y;
+    float x3 = edgeStart.x, y3 = edgeStart.y;
+    float x4 = edgeEnd.x, y4 = edgeEnd.y;
+
+    float t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
+    float x = x1 + t * (x2 - x1);
+    float y = y1 + t * (y2 - y1);
+
+    return new Vector3(x, y, 0);
 }
