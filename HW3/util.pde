@@ -18,57 +18,95 @@ public float distance(Vector3 a, Vector3 b) {
     return sqrt(Vector3.dot(c, c));
 }
 
-
-
 boolean pnpoly(float x, float y, Vector3[] vertexes) {
-    // HW2
-    // To-Do : You need to check the coordinate p(x,v) if inside the vertexes. If yes return true.
+  // To-Do : You need to check the coordinate p(x,v) if inside the vertexes. If yes return true.
+    
+  boolean c = false;
 
-    boolean c = false;
+  int i, j;
+  for (i = 0, j = vertexes.length - 1; i < vertexes.length; j = i++) {
+    if ( ((vertexes[i].y > y) != (vertexes[j].y > y)) &&
+     (x < (vertexes[j].x - vertexes[i].x) * (y - vertexes[i].y) / (vertexes[j].y - vertexes[i].y) + vertexes[i].x) )
+       c = !c;
+  }
 
-    return c;
+  return c;
 }
 
 public Vector3[] findBoundBox(Vector3[] v) {
-    Vector3 recordminV=new Vector3(1.0/0.0);
-    Vector3 recordmaxV=new Vector3(-1.0/0.0);
-    // HW2
+    Vector3 recordminV = new Vector3(Float.MAX_VALUE);
+    Vector3 recordmaxV = new Vector3(Float.MIN_VALUE);
     // To-Do : You need to find the bounding box of the vertexes v.
-
+    
     //     r1 -------
     //       |   /\  |
     //       |  /  \ |
     //       | /____\|
     //        ------- r2
+    
+    for (Vector3 vertex : v) {
+        if (vertex.x < recordminV.x) recordminV.x = vertex.x;
+        if (vertex.y < recordminV.y) recordminV.y = vertex.y;
+        if (vertex.z < recordminV.z) recordminV.z = vertex.z;
 
+        if (vertex.x > recordmaxV.x) recordmaxV.x = vertex.x;
+        if (vertex.y > recordmaxV.y) recordmaxV.y = vertex.y;
+        if (vertex.z > recordmaxV.z) recordmaxV.z = vertex.z;
+    }
 
-    Vector3[] result={recordminV, recordmaxV};
+    Vector3[] result = {recordminV, recordmaxV};
+
     return result;
 }
-
 
 public Vector3[] Sutherland_Hodgman_algorithm(Vector3[] points, Vector3[] boundary) {
     ArrayList<Vector3> input=new ArrayList<Vector3>();
     ArrayList<Vector3> output=new ArrayList<Vector3>();
-    for (int i=0; i<points.length; i+=1) {
+    for (int i=0; i < points.length; i+=1) {
         input.add(points[i]);
     }
 
-    // HW2
     // To-Do
     // You need to implement the Sutherland Hodgman Algorithm in this section.
     // The function you pass 2 parameter. One is the vertexes of the shape "points".
     // And the other is the vertexes of the "boundary".
     // The output is the vertexes of the polygon.
 
+    // iterate through each edge of the boundary
+    for (int i = 0; i < boundary.length; i++) {
+        Vector3 clipEdgeStart = boundary[i]; // start point of the edge
+        Vector3 clipEdgeEnd = boundary[(i + 1) % boundary.length]; // end point of the edge
 
-    output = input;
+        output.clear();
 
+        // iterate through each edge of the polygon
+        for (int j = 0; j < input.size(); j++) {
+            Vector3 currentPoint = input.get(j); // current point
+            Vector3 prevPoint = input.get((j + input.size() - 1) % input.size());  // previous point
 
+            boolean currentInside = isInside(clipEdgeStart, clipEdgeEnd, currentPoint); // check if current point is inside the boundary
+            boolean prevInside = isInside(clipEdgeStart, clipEdgeEnd, prevPoint); // check if previous point is inside the boundary
 
-    Vector3[] result=new Vector3[output.size()];
-    for (int i=0; i<result.length; i+=1) {
-        result[i]=output.get(i);
+            // if current point is inside the boundary, add it to the output
+            if (currentInside) {
+                // if previous point is outside the boundary, add the intersection point to the output
+                if (!prevInside) {
+                    output.add(intersect(prevPoint, currentPoint, clipEdgeStart, clipEdgeEnd));
+                }
+                output.add(currentPoint);
+            } 
+            // if previous point is inside the boundary, add the intersection point to the output
+            else if (prevInside) {
+                output.add(intersect(prevPoint, currentPoint, clipEdgeStart, clipEdgeEnd));
+            }
+        }
+
+        input = new ArrayList<Vector3>(output);
+    }
+
+    Vector3[] result = new Vector3[output.size()];
+    for (int i=0; i < result.length; i+=1) {
+        result[i] = output.get(i);
     }
     return result;
 }

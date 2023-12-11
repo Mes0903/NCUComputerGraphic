@@ -31,31 +31,55 @@ static public class Matrix4{
      m[12] = 0.0f; m[13] = 0.0f; m[14] = 0.0f; m[15] = 1.0f;
     
   }
-   void makeRotX(float a) {
-       // To-Do
+
+  void makeRotX(float a) {
+    // To-Do
     // You need to implement the rotation of x-axis matrix here.
-     makeIdentity();
+
+    m[0] =  1.0f; m[1]  = 0.0f;   m[2]  = 0.0f;    m[3]  = 0.0f;
+    m[4] =  0.0f; m[5]  = cos(a); m[6]  = -sin(a); m[7]  = 0.0f;
+    m[8] =  0.0f; m[9]  = sin(a); m[10] = cos(a);  m[11] = 0.0f;
+    m[12] = 0.0f; m[13] = 0.0f;   m[14] = 0.0f;    m[15] = 1.0f;
   }
+
   void makeRotY(float a) {
     // To-Do
     // You need to implement the rotation of y-axis matrix here.
-    makeIdentity();
+
+    m[0]  = cos(a);  m[1]  = 0.0f; m[2]  = sin(a); m[3]  = 0.0f;
+    m[4]  = 0.0f;    m[5]  = 1.0f; m[6]  = 0.0f;   m[7]  = 0.0f;
+    m[8]  = -sin(a); m[9]  = 0.0f; m[10] = cos(a); m[11] = 0.0f;
+    m[12] = 0.0f;    m[13] = 0.0f; m[14] = 0.0f;   m[15] = 1.0f;
   }
+
   void makeRotZ(float a) {
-    // To-Do (HW2)
+    // To-Do
     // You need to implement the rotation of z-axis matrix here.
-    makeIdentity();
+
+    m[0]  = cos(a); m[1]  = -sin(a); m[2]  = 0.0f; m[3]  = 0.0f;
+    m[4]  = sin(a); m[5]  = cos(a);  m[6]  = 0.0f; m[7]  = 0.0f;
+    m[8]  = 0.0f;   m[9]  = 0.0f;    m[10] = 1.0f; m[11] = 0.0f;
+    m[12] = 0.0f;   m[13] = 0.0f;    m[14] = 0.0f; m[15] = 1.0f;
   }
   
   void makeTrans(Vector3 t) {
     // To-Do
     // You need to implement the translate matrix here.
-    makeIdentity();
+
+    m[0]  = 1.0f; m[1]  = 0.0f; m[2]  = 0.0f; m[3]  = t.x;
+    m[4]  = 0.0f; m[5]  = 1.0f; m[6]  = 0.0f; m[7]  = t.y;
+    m[8]  = 0.0f; m[9]  = 0.0f; m[10] = 1.0f; m[11] = t.z;
+    m[12] = 0.0f; m[13] = 0.0f; m[14] = 0.0f; m[15] = 1.0f;
   }
+
   void makeScale(Vector3 s) {
     // To-Do
-    // You need to implement the scale matrix here.     
-   makeIdentity();
+    // You need to implement the scale matrix here.
+
+    m[0]  = s.x;  m[1]  = 0.0f; m[2]  = 0.0f; m[3]  = 0.0f;
+    m[4]  = 0.0f; m[5]  = s.y;  m[6]  = 0.0f; m[7]  = 0.0f;
+    m[8]  = 0.0f; m[9]  = 0.0f; m[10] = s.z;  m[11] = 0.0f;
+    m[12] = 0.0f; m[13] = 0.0f; m[14] = 0.0f; m[15] = 1.0f;
   }
   
   void makeMirror(){
