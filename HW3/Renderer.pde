@@ -15,8 +15,6 @@ public class Renderer{
       
     }
     
-
-    
     public void addGameObject(GameObject go){
       gameObject.add(go);
       engine.hierarchy.addButton(go);

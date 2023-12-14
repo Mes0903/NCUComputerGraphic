@@ -17,15 +17,10 @@ public class Engine{
         main_camera.setSize(int(renderer_size.z - renderer_size.x) , int(renderer_size.w - renderer_size.y) , GH_NEAR_MAX , GH_FAR);
         main_camera.setPositionOrientation(cam_position,lookat);
         initButton();
-        
     } 
     
     public void initButton(){
-        selctFileButton = new ShapeButton(20,10,30,30){
-
-        };
-        
-        
+        selctFileButton = new ShapeButton(20,10,30,30){};
         
         selctFileButton.setBoxAndClickColor(color(250),color(150));
         selctFileButton.setImage(loadImage("cube.png"));
@@ -34,11 +29,7 @@ public class Engine{
         DegubButton =  new ShapeButton(60,10,30,30);
         DegubButton.setBoxAndClickColor(color(250),color(150));
         DegubButton.setImage(loadImage("debug.png"));
-        
-
     }
-    
-   
     
     void run(){      
        setDepthBuffer();
@@ -60,8 +51,6 @@ public class Engine{
         DegubButton.run(()->{
             debug = !debug;
         });
-       
-       
     }
     
     
