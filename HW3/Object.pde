@@ -14,7 +14,7 @@ public class GameObject {
         setMesh(fname);
         String[] sn = fname.split("\\\\");
         name = sn[sn.length-1].substring(0, sn[sn.length-1].length()-4);
-        shader = new Shader(new DepthVertexShader(), new DepthFragmentShader());
+        shader = new Shader(new DepthVertexShader(), new DepthFragmentShader());  
     }
 
     void reset() {
@@ -94,8 +94,7 @@ public class GameObject {
         // To - Do 
         // You need to calculate the model Matrix here.
         
-        return Matrix4.Identity();
-       
+        return Matrix4.Trans(transform.position).mult(Matrix4.RotZ(transform.rotation.z)).mult(Matrix4.RotX(transform.rotation.x)).mult(Matrix4.RotY(transform.rotation.y)).mult(Matrix4.Scale(transform.scale));
     }
     
     Matrix4 worldToLocal() {
