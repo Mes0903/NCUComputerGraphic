@@ -111,6 +111,25 @@ public Vector3[] Sutherland_Hodgman_algorithm(Vector3[] points, Vector3[] bounda
     return result;
 }
 
+// check if a point is inside the boundary
+private boolean isInside(Vector3 edgeStart, Vector3 edgeEnd, Vector3 point) {
+    return ((edgeEnd.x - edgeStart.x) * (point.y - edgeStart.y) - (edgeEnd.y - edgeStart.y) * (point.x - edgeStart.x)) < 0;
+}
+
+// find the intersection point of a line and an edge
+private Vector3 intersect(Vector3 lineStart, Vector3 lineEnd, Vector3 edgeStart, Vector3 edgeEnd) {
+    float x1 = lineStart.x, y1 = lineStart.y;
+    float x2 = lineEnd.x, y2 = lineEnd.y;
+    float x3 = edgeStart.x, y3 = edgeStart.y;
+    float x4 = edgeEnd.x, y4 = edgeEnd.y;
+
+    float t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
+    float x = x1 + t * (x2 - x1);
+    float y = y1 + t * (y2 - y1);
+
+    return new Vector3(x, y, 0);
+}
+
 public float getDepth(float x, float y, Vector3[] vertex ) {
     // To - Do
     // You need to calculate the depth (z) in the triangle (vertex) based on the positions x and y. and return the z value;
