@@ -35,29 +35,49 @@ public class Camera {
 
 
     void setSize(int w, int h, float n, float f) {
+        // Setting the camera's width, height, near and far planes
         wid = w;
         hei = h;
         near = n;
         far = f;
-        // To - Do
-        // This function takes four parameters, which are the width of the screen, the height of the screen
-        // the near plane and the far plane of the camera.
-        // Where GH_FOV has been declared as a global variable.
-        // Finally, pass the result into projection matrix.
-        
-        projection = Matrix4.Identity();
-       
+
+        // Calculate the aspect ratio and the field of view in radians
+        float aspect = float(w) / float(h);
+        float fov = radians(GH_FOV);
+
+        // Creating the projection matrix for a perspective projection
+        projection.makeZero(); // Resetting the projection matrix to zero
+        projection.m[0] = 1.0 / (tan(fov / 2) * aspect);
+        projection.m[5] = 1.0 / tan(fov / 2);
+        projection.m[10] = (far + near) / (near - far);
+        projection.m[11] = -1;
+        projection.m[14] = (2 * far * near) / (near - far);
     }
-    void setPositionOrientation(Vector3 pos, float rotX, float rotY) {
-       
-    }
+
+    void setPositionOrientation(Vector3 pos, float rotX, float rotY) {}
 
     void setPositionOrientation(Vector3 pos, Vector3 lookat) {
-        // To - Do
-        // This function takes two parameters, which are the position of the camera and the point the camera is looking at.
-        // We uses topVector = (0,1,0) to calculate the eye matrix.
-        // Finally, pass the result into worldView matrix.
+        // T
+        Matrix4 T = Matrix4.Trans(pos.mult(-1));
 
-        worldView = Matrix4.Identity();
+        // Calculate the forward vector (lookat - position)
+        Vector3 forward = Vector3.sub(lookat, pos).unit_vector();
+
+        // Define the up vector (world's up forward)
+        Vector3 up = new Vector3(0, 1, 0);
+
+        // Calculate the right vector (cross product of up and forward)
+        Vector3 right = Vector3.cross(forward, up).unit_vector();
+
+        // Calculate the real up vector (cross product of forward and right)
+        up = Vector3.cross(right, forward).unit_vector();
+
+        // GRM
+        Matrix4 GRM = Matrix4.Identity();
+        GRM.m[0] = right.x;   GRM.m[1] = right.y;    GRM.m[2] = right.z;
+        GRM.m[4] = up.x;      GRM.m[5] = up.y;      GRM.m[6] = up.z;
+        GRM.m[8] = forward.x; GRM.m[9] = forward.y; GRM.m[10] = forward.z;
+
+        worldView = GRM.mult(T);
     }
 }
