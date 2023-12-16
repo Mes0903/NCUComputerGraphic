@@ -133,18 +133,31 @@ private Vector3 intersect(Vector3 lineStart, Vector3 lineEnd, Vector3 edgeStart,
 public float getDepth(float x, float y, Vector3[] vertex ) {
     // To - Do
     // You need to calculate the depth (z) in the triangle (vertex) based on the positions x and y. and return the z value;
+    Vector3 A = vertex[0];
+    Vector3 B = vertex[1];
+    Vector3 C = vertex[2];
 
-    return 0.0;
+    // Compute vectors from point to vertices
+    Vector3 ab = B.sub(A);
+    Vector3 ac = C.sub(A);
+    Vector3 n = Vector3.cross(ab, ac);
+
+    // ax + by + cz + d = 0, n = (a, b, c)
+    float d = -1 * Vector3.dot(n, A);
+
+    float z = -(n.x * x + n.y * y + d) / n.z;    
+    return z;
 }
 
 float[] barycentric(Vector3 P, Vector4[] verts) {
 
-    Vector3 A=verts[0].homogenized();
-    Vector3 B=verts[1].homogenized();
-    Vector3 C=verts[2].homogenized();
+    Vector3 A = verts[0].homogenized();
+    Vector3 B = verts[1].homogenized();
+    Vector3 C = verts[2].homogenized();
 
     // To - Do (HW4)
     // Calculate the barycentric coordinates of point P in the triangle verts using the barycentric coordinate system.
+    
 
 
     float[] result={0.0, 0.0, 0.0};
