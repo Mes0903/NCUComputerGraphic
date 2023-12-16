@@ -4,7 +4,6 @@ public class GameObject {
     String name;
     Shader shader;
 
-
     GameObject() {
         transform = new Transform();
     }
@@ -29,14 +28,15 @@ public class GameObject {
 
     void Draw() {
         Matrix4 MVP = main_camera.Matrix().mult(localToWorld());
-        for (int i=0; i<mesh.triangles.size(); i++) {
+        for (int i=0; i < mesh.triangles.size(); i++) {
             Triangle triangle = mesh.triangles.get(i);
             Vector3[] position = triangle.verts;
             Vector4[] gl_Position = shader.vertex.main(new Object[]{position}, new Object[]{MVP});
             Vector3[] s_Position = new Vector3[3];
-            for (int j = 0; j<gl_Position.length; j++) {
+            for (int j = 0; j < gl_Position.length; j++) {
                 s_Position[j] = gl_Position[j].homogenized();
             }
+
             Vector3[] boundbox = findBoundBox(s_Position);
             float minX = map(min( max(boundbox[0].x, -1.0 ), 1.0), -1.0, 1.0, 0.0, renderer_size.z - renderer_size.x);
             float maxX = map(min( max(boundbox[1].x, -1.0 ), 1.0), -1.0, 1.0, 0.0, renderer_size.z - renderer_size.x);
@@ -47,6 +47,7 @@ public class GameObject {
                 for (int x = int(minX); x < maxX; x++) {
                     float rx=map(x, 0.0 , renderer_size.z - renderer_size.x, -1, 1);
                     float ry=map(y, 0.0, renderer_size.w - renderer_size.y, -1, 1);
+
                     if (!pnpoly(rx, ry, s_Position)) continue;
                     int index = y * int(renderer_size.z - renderer_size.x) + x;
                     
@@ -68,21 +69,33 @@ public class GameObject {
 
     void debugDraw() {
         Matrix4 MVP = main_camera.Matrix().mult(localToWorld());
-        for (int i=0; i<mesh.triangles.size(); i++) {
+
+        for (int i=0; i < mesh.triangles.size(); i++) {
             Triangle triangle = mesh.triangles.get(i);
             Vector3[] img_pos = new Vector3[3];
-            for (int j=0; j<3; j++) {
+
+            for (int j=0; j < 3; j++) {
                 img_pos[j] = MVP.mult(triangle.verts[j].getVector4(1.0)).homogenized();
             }
 
-
-            for (int j=0; j<img_pos.length; j++) {
+            for (int j=0; j < img_pos.length; j++) {
                 img_pos[j] = new Vector3(map(img_pos[j].x, -1, 1, renderer_size.x, renderer_size.z), map(img_pos[j].y, -1, 1, renderer_size.y, renderer_size.w), img_pos[j].z);
             }
+            
+            // Calculate the normal of the triangle
+            Vector3 edge1 = Vector3.sub(img_pos[1], img_pos[0]);
+            Vector3 edge2 = Vector3.sub(img_pos[2], img_pos[0]);
+            Vector3 normal = Vector3.cross(edge1, edge2);
 
-            CGLine(img_pos[0].x, img_pos[0].y, img_pos[1].x, img_pos[1].y);
-            CGLine(img_pos[1].x, img_pos[1].y, img_pos[2].x, img_pos[2].y);
-            CGLine(img_pos[2].x, img_pos[2].y, img_pos[0].x, img_pos[0].y);
+            // Vector from camera to a vertex of the triangle
+            Vector3 camVec = Vector3.sub(cam_position, img_pos[0]);
+
+            // If the camera is in the same side of the normal, then the triangle is not visible
+            if (Vector3.dot(normal, camVec) < 0) {
+                CGLine(img_pos[0].x, img_pos[0].y, img_pos[1].x, img_pos[1].y);
+                CGLine(img_pos[1].x, img_pos[1].y, img_pos[2].x, img_pos[2].y);
+                CGLine(img_pos[2].x, img_pos[2].y, img_pos[0].x, img_pos[0].y);
+            }
         }
     }
 
@@ -90,10 +103,11 @@ public class GameObject {
         return name;
     }
 
+    
     Matrix4 localToWorld() {
         // To - Do 
         // You need to calculate the model Matrix here.
-        
+
         return Matrix4.Trans(transform.position).mult(Matrix4.RotZ(transform.rotation.z)).mult(Matrix4.RotX(transform.rotation.x)).mult(Matrix4.RotY(transform.rotation.y)).mult(Matrix4.Scale(transform.scale));
     }
     
