@@ -41,17 +41,21 @@ public class Camera {
         near = n;
         far = f;
 
+        println("Camera size: " + wid + "x" + hei + " near: " + near + " far: " + far);
+        
+
         // Calculate the aspect ratio and the field of view in radians
-        float aspect = float(w) / float(h);
-        float fov = radians(GH_FOV);
+        float e = 1.0f / tan(GH_FOV * 2*PI / 360.0f);
+        float a = float(h) / float(w);
+        float d = near - far;
 
         // Creating the projection matrix for a perspective projection
         projection.makeZero(); // Resetting the projection matrix to zero
-        projection.m[0] = 1.0 / (tan(fov / 2) * aspect);
-        projection.m[5] = 1.0 / tan(fov / 2);
-        projection.m[10] = (far + near) / (near - far);
-        projection.m[11] = -1;
-        projection.m[14] = (2 * far * near) / (near - far);
+        projection.m[0] = 1;
+        projection.m[5] = a;
+        projection.m[10] = far / -d * (1/e);
+        projection.m[11] = (near * far) / d * (1/e);
+        projection.m[14] = 1/e;
     }
 
     void setPositionOrientation(Vector3 pos, float rotX, float rotY) {}
@@ -74,7 +78,7 @@ public class Camera {
 
         // GRM
         Matrix4 GRM = Matrix4.Identity();
-        GRM.m[0] = right.x;   GRM.m[1] = right.y;    GRM.m[2] = right.z;
+        GRM.m[0] = right.x;   GRM.m[1] = right.y;   GRM.m[2] = right.z;
         GRM.m[4] = up.x;      GRM.m[5] = up.y;      GRM.m[6] = up.z;
         GRM.m[8] = forward.x; GRM.m[9] = forward.y; GRM.m[10] = forward.z;
 
