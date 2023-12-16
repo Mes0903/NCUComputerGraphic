@@ -198,9 +198,6 @@ class Mesh {
 
     void Draw() {
     }
-    void debudDraw() {
-    }
-
 
     void addFace(int a, int at, int b, int bt, int c, int ct) {
         a-=1;
